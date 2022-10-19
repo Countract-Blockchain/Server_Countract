@@ -13,6 +13,16 @@ Step-2: Installing Dependencies
     pip install -r requirements.txt
   ```
 
+Step-3: Change to venv
+  ```bash
+    & venv/Scripts/Activate.ps1 
+  ```
+
+Step-4: Run The app
+  ```bash
+    python -u "app.py"
+  ```
+
 # List API Countrack
 ## 1. Register User
 ```
