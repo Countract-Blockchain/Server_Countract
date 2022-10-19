@@ -1,6 +1,7 @@
 from models.dokumen_model import dokumen_model
 from models.auth_model import auth_model
 from models.akses_model import akses_model
+from models.user_model import user_model
 import jwt
 from flask import request, send_file, jsonify, make_response
 from modules.encode import encode_image
@@ -12,6 +13,7 @@ from app import app
 obj = dokumen_model()
 auth = auth_model()
 aks_model = akses_model() 
+usr_model = user_model()
 
 @app.route("/dokumen/upload", methods=["POST"])
 @auth.token_auth()
@@ -110,13 +112,19 @@ def check_dokumen_akses():
     token = authorization.split(" ")[1]
     tokendata = jwt.decode(token, key_jwt["key"], algorithms="HS256")
 
+    email = {
+        "email":request.form['email_owner']
+    }
+
+    id_user = usr_model.get_id_user_by_email(email)
+
     data = {
-        "user_id":tokendata["ID"],
+        "user_id":id_user[0]["ID"],
         "jenis":request.form['jenis']
     }
 
     dokumen_data = obj.get_dokumen_model(data)
-    # print(dokumen_data)
+
     isAkses = False
     if len(dokumen_data) == 1:
         check_data = {

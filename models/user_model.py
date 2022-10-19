@@ -20,6 +20,14 @@ class user_model():
             # return make_response({"payload":result},200)
         else:
             return "No Data Found"
+    
+    def get_id_user_by_email(self, data):
+        self.cur.execute(f"SELECT ID FROM users WHERE email='{data['email']}'")
+        result = self.cur.fetchall()
+        if len(result)>0:
+            return result
+        else:
+            return None
 
     def add_user_model(self,data):
         self.cur.execute(f"INSERT INTO users(email, password) VALUES('{data['email']}', '{data['password']}')")

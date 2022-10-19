@@ -16,3 +16,8 @@ class dokumen_model():
         self.cur.execute(f"SELECT ID, path FROM dokumens WHERE user_id='{data['user_id']}' AND jenis='{data['jenis']}'")
         result = self.cur.fetchall()
         return result
+
+    # def get_dokumen_model_by_email(self,data):
+    #     self.cur.execute(f"SELECT ID, path FROM dokumens WHERE user_id='{data['email']}' AND jenis='{data['jenis']}'")
+    #     result = self.cur.fetchall()
+    #     return result

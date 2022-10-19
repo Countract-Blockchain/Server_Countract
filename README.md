@@ -109,4 +109,18 @@ response(200): {
 }
 ```
 ## 7. Get Other Person Document
-Same with ``6. Get Document`` but accessed by selain pemilik document
+```
+method: POST
+endpoint: "/dokumen/akses"
+header: {
+    Authorization
+}
+request form-data: {
+    jenis, email_owner
+}
+response(200): {
+    data: [
+        {ID, path/url}
+    ]
+}
+```
