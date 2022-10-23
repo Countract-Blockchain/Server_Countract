@@ -1,5 +1,6 @@
 import mysql.connector
 import bcrypt
+# from configs.config import dbconfig
 
 # dbconfig = {
 #     "host":"localhost",
@@ -18,6 +19,21 @@ config['password'] = os.getenv('db_hpassword')
 config['database'] = os.getenv('db_database')
 
 config['key_jwt'] = os.getenv('key_jwt')
+
+# if config['host'] == None:
+#     config['host'] = dbconfig['host']
+
+# if config['username'] == None:
+#     config['username'] = dbconfig['username']
+
+# if config['password'] == None:
+#     config['password'] = dbconfig['password']
+
+# if config['database'] == None:
+#     config['database'] = dbconfig['database']
+
+# if config['key_jwt'] == None:
+#     config['key_jwt'] = key_jwt['key']
 
 
 class migration():

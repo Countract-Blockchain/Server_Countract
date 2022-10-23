@@ -3,7 +3,7 @@ import mysql.connector
 import json
 from flask import make_response, jsonify
 import jwt
-# from configs.config import dbconfig, key_jwt
+# from configs.config import dbconfig
 import bcrypt
 
 import os
@@ -11,7 +11,7 @@ import os
 config = {}
 config['host'] = os.getenv('db_host')
 config['username'] = os.getenv('db_username')
-config['password'] = os.getenv('db_hpassword')
+config['password'] = os.getenv('db_password')
 config['database'] = os.getenv('db_database')
 
 config['key_jwt'] = os.getenv('key_jwt')
@@ -27,9 +27,6 @@ config['key_jwt'] = os.getenv('key_jwt')
 
 # if config['database'] == None:
 #     config['database'] = dbconfig['database']
-
-# if config['key_jwt'] == None:
-#     config['key_jwt'] = key_jwt['key']
 
 class user_model():
     def __init__(self):
