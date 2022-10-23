@@ -1,20 +1,31 @@
 import mysql.connector
 import bcrypt
 
-dbconfig = {
-    "host":"localhost",
-    "port":"3306",
-    "username":"root",
-    "password":"",
-    "database":"countract_db"
-}
+# dbconfig = {
+#     "host":"localhost",
+#     "port":"3306",
+#     "username":"root",
+#     "password":"",
+#     "database":"countract_db"
+# }
+
+import os
+
+config = {}
+config['host'] = os.getenv('db_host')
+config['username'] = os.getenv('db_username')
+config['password'] = os.getenv('db_hpassword')
+config['database'] = os.getenv('db_database')
+
+config['key_jwt'] = os.getenv('key_jwt')
+
 
 class migration():
     def __init__(self):
-        self.con = mysql.connector.connect(host=dbconfig['host'],user=dbconfig['username'],password=dbconfig['password'],database=dbconfig['database'])
+        self.con = mysql.connector.connect(host=config['host'],user=config['username'],password=config['password'],database=config['database'])
         self.con.autocommit=True
         self.cur = self.con.cursor(dictionary=True)
-    
+
     def users(self):
         self.cur.execute("DROP TABLE IF EXISTS users;")
         salt = bcrypt.gensalt()

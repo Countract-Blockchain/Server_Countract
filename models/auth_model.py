@@ -17,28 +17,28 @@ config['database'] = os.getenv('db_database')
 
 config['key_jwt'] = os.getenv('key_jwt')
 
-if config['host'] == None:
-    config['host'] = dbconfig['host']
+# if config['host'] == None:
+#     config['host'] = dbconfig['host']
 
-if config['username'] == None:
-    config['username'] = dbconfig['username']
+# if config['username'] == None:
+#     config['username'] = dbconfig['username']
 
-if config['password'] == None:
-    config['password'] = dbconfig['password']
+# if config['password'] == None:
+#     config['password'] = dbconfig['password']
 
-if config['database'] == None:
-    config['database'] = dbconfig['database']
+# if config['database'] == None:
+#     config['database'] = dbconfig['database']
 
-if config['key_jwt'] == None:
-    config['key_jwt'] = key_jwt['key']
+# if config['key_jwt'] == None:
+#     config['key_jwt'] = key_jwt['key']
 
 class auth_model():
-    
+
     def __init__(self):
         self.con = mysql.connector.connect(host=config['host'],user=config['username'],password=config['password'],database=config['database'])
         self.con.autocommit=True
         self.cur = self.con.cursor(dictionary=True)
-        
+
     def token_auth(self, endpoint=""):
         def inner1(func):
             @wraps(func)

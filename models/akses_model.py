@@ -9,17 +9,17 @@ config['username'] = os.getenv('db_username')
 config['password'] = os.getenv('db_hpassword')
 config['database'] = os.getenv('db_database')
 
-if config['host'] == None:
-    config['host'] = dbconfig['host']
+# if config['host'] == None:
+#     config['host'] = dbconfig['host']
 
-if config['username'] == None:
-    config['username'] = dbconfig['username']
+# if config['username'] == None:
+#     config['username'] = dbconfig['username']
 
-if config['password'] == None:
-    config['password'] = dbconfig['password']
+# if config['password'] == None:
+#     config['password'] = dbconfig['password']
 
-if config['database'] == None:
-    config['database'] = dbconfig['database']
+# if config['database'] == None:
+#     config['database'] = dbconfig['database']
 
 class akses_model():
     def __init__(self):

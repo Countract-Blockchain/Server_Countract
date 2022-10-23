@@ -7,11 +7,11 @@ config = {}
 config['host'] = os.getenv('app_host')
 config['port'] = os.getenv('app_port')
 
-if config['host'] == None:
-    config['host'] = app_config['host']
+# if config['host'] == None:
+#     config['host'] = app_config['host']
 
-if config['port'] == None:
-    config['port'] = app_config['port']
+# if config['port'] == None:
+#     config['port'] = app_config['port']
 
 try:
     from controllers.user_controller import *

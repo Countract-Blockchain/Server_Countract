@@ -1,30 +1,30 @@
-app_config = {
-    "host":"0.0.0.0",
-    "port":"5000"
-}
+# app_config = {
+#     "host":"0.0.0.0",
+#     "port":"5000"
+# }
 
-dbconfig = {
-    "host":"localhost",
-    "port":"3306",
-    "username":"root",
-    "password":"",
-    "database":"countract_db"
-}
+# dbconfig = {
+#     "host":"localhost",
+#     "port":"3306",
+#     "username":"root",
+#     "password":"",
+#     "database":"countract_db"
+# }
 
-key_jwt = {
-    "key":"kumakumabear"
-}
+# key_jwt = {
+#     "key":"kumakumabear"
+# }
 
-import os
+# import os
 
-# Set environment variables
-os.environ['app_host'] = '0.0.0.0'
-os.environ['app_port'] = '5000'
+# # Set environment variables
+# os.environ['app_host'] = '0.0.0.0'
+# os.environ['app_port'] = '5000'
 
-os.environ['db_host'] = 'localhost'
-os.environ['db_port'] = '3306'
-os.environ['db_username'] = 'root'
-os.environ['db_password'] = ''
-os.environ['db_database'] = 'countract_db'
+# os.environ['db_host'] = 'localhost'
+# os.environ['db_port'] = '3306'
+# os.environ['db_username'] = 'root'
+# os.environ['db_password'] = ''
+# os.environ['db_database'] = 'countract_db'
 
-os.environ['key_jwt'] = 'kumakumabear'
+# os.environ['key_jwt'] = 'kumakumabear'

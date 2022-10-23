@@ -14,12 +14,12 @@ import os
 config = {}
 config['key_jwt'] = os.getenv('key_jwt')
 
-if config['key_jwt'] == None:
-    config['key_jwt'] = key_jwt['key']
+# if config['key_jwt'] == None:
+#     config['key_jwt'] = key_jwt['key']
 
 obj = dokumen_model()
 auth = auth_model()
-aks_model = akses_model() 
+aks_model = akses_model()
 usr_model = user_model()
 
 @app.route("/dokumen/upload", methods=["POST"])
@@ -35,7 +35,7 @@ def upload_encode():
             "status": "Bad Request",
             "message": "No file part."
         }), 400
-    
+
     if "img_hidden" not in request.files:
         return jsonify({
             "status": "Bad Request",
@@ -44,7 +44,7 @@ def upload_encode():
 
     source_img_visible = request.files.get("img_visible")
     source_img_hidden = request.files.get("img_hidden")
-    
+
     if source_img_visible.filename == "":
         return jsonify({
             "status": "Bad Request",
@@ -81,7 +81,7 @@ def dokumen_decode():
             "status": "Bad Request",
             "message": "No file part."
         }), 400
-    
+
     source_image = request.files.get("image")
 
     if source_image.filename == "":

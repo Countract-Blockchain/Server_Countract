@@ -16,20 +16,20 @@ config['database'] = os.getenv('db_database')
 
 config['key_jwt'] = os.getenv('key_jwt')
 
-if config['host'] == None:
-    config['host'] = dbconfig['host']
+# if config['host'] == None:
+#     config['host'] = dbconfig['host']
 
-if config['username'] == None:
-    config['username'] = dbconfig['username']
+# if config['username'] == None:
+#     config['username'] = dbconfig['username']
 
-if config['password'] == None:
-    config['password'] = dbconfig['password']
+# if config['password'] == None:
+#     config['password'] = dbconfig['password']
 
-if config['database'] == None:
-    config['database'] = dbconfig['database']
+# if config['database'] == None:
+#     config['database'] = dbconfig['database']
 
-if config['key_jwt'] == None:
-    config['key_jwt'] = key_jwt['key']
+# if config['key_jwt'] == None:
+#     config['key_jwt'] = key_jwt['key']
 
 class user_model():
     def __init__(self):
@@ -45,7 +45,7 @@ class user_model():
             # return make_response({"payload":result},200)
         else:
             return "No Data Found"
-    
+
     def get_id_user_by_email(self, data):
         self.cur.execute(f"SELECT ID FROM users WHERE email='{data['email']}'")
         result = self.cur.fetchall()
@@ -62,7 +62,7 @@ class user_model():
         self.cur.execute(f"SELECT ID, email, password from users WHERE email='{username}'")
         result = self.cur.fetchall()
         print(result[0]['password'])
-        
+
         if len(result)==1:
             if bcrypt.checkpw(bytes(f"{password}", encoding="utf-8"), bytes(f"{result[0]['password']}", encoding="utf-8")):
                 exptime = datetime.now() + timedelta(minutes=30)
