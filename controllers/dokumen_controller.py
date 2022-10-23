@@ -9,6 +9,13 @@ from modules.decode import decode_image
 from PIL import Image
 from configs.config import key_jwt
 from app import app
+import os
+
+config = {}
+config['key_jwt'] = os.getenv('key_jwt')
+
+if config['key_jwt'] == None:
+    config['key_jwt'] = key_jwt['key']
 
 obj = dokumen_model()
 auth = auth_model()
@@ -20,7 +27,7 @@ usr_model = user_model()
 def upload_encode():
     authorization = request.headers.get("authorization")
     token = authorization.split(" ")[1]
-    tokendata = jwt.decode(token, key_jwt["key"], algorithms="HS256")
+    tokendata = jwt.decode(token, config['key_jwt'], algorithms="HS256")
     jenis = request.form['jenis']
 
     if "img_visible" not in request.files:
@@ -96,7 +103,7 @@ def dokumen_decode():
 def get_dokumen():
     authorization = request.headers.get("authorization")
     token = authorization.split(" ")[1]
-    tokendata = jwt.decode(token, key_jwt["key"], algorithms="HS256")
+    tokendata = jwt.decode(token, config['key_jwt'], algorithms="HS256")
 
     data = {
         "user_id":tokendata["ID"],
@@ -110,7 +117,7 @@ def get_dokumen():
 def check_dokumen_akses():
     authorization = request.headers.get("authorization")
     token = authorization.split(" ")[1]
-    tokendata = jwt.decode(token, key_jwt["key"], algorithms="HS256")
+    tokendata = jwt.decode(token, config['key_jwt'], algorithms="HS256")
 
     email = {
         "email":request.form['email_owner']

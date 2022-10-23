@@ -23,6 +23,11 @@ Step-4: Run The app
     python -u "app.py"
   ```
 
+# How to Migrate
+```bash
+python -u "migration\migration.py"
+```
+
 # List API Countrack
 ## 1. Register User
 ```
