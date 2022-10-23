@@ -12,7 +12,7 @@ import os
 config = {}
 config['host'] = os.getenv('db_host')
 config['username'] = os.getenv('db_username')
-config['password'] = os.getenv('db_hpassword')
+config['password'] = os.getenv('db_password')
 config['database'] = os.getenv('db_database')
 
 config['key_jwt'] = os.getenv('key_jwt')
