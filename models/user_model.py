@@ -3,7 +3,7 @@ import mysql.connector
 import json
 from flask import make_response, jsonify
 import jwt
-from configs.config import dbconfig, key_jwt
+# from configs.config import dbconfig, key_jwt
 import bcrypt
 
 import os

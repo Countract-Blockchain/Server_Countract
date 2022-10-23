@@ -1,5 +1,5 @@
 import mysql.connector
-from configs.config import dbconfig
+# from configs.config import dbconfig
 from flask import make_response
 
 import os

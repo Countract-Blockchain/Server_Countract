@@ -1,6 +1,6 @@
 from flask import Flask
 import os
-from configs.config import app_config
+# from configs.config import app_config
 
 app = Flask(__name__, static_folder=None)
 config = {}

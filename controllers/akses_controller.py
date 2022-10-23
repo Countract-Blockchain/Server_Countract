@@ -3,7 +3,7 @@ from app import app
 from models.akses_model import akses_model
 from models.auth_model import auth_model
 import jwt
-from configs.config import key_jwt
+# from configs.config import key_jwt
 import os
 
 config = {}
