@@ -7,15 +7,15 @@ from flask import request, send_file, jsonify, make_response
 from modules.encode import encode_image
 from modules.decode import decode_image
 from PIL import Image
-# from configs.config import key_jwt
+from configs.config import key_jwt
 from app import app
 import os
 
 config = {}
 config['key_jwt'] = os.getenv('key_jwt')
 
-# if config['key_jwt'] == None:
-#     config['key_jwt'] = key_jwt['key']
+if config['key_jwt'] == None:
+    config['key_jwt'] = key_jwt['key']
 
 obj = dokumen_model()
 auth = auth_model()
