@@ -7,7 +7,7 @@ from flask import request, send_file, jsonify, make_response
 from modules.encode import encode_image
 from modules.decode import decode_image
 from PIL import Image
-from configs.config import key_jwt
+# from configs.config import key_jwt
 from app import app
 import os
 

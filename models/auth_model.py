@@ -4,7 +4,7 @@ import mysql.connector
 import jwt
 from flask import make_response, request, json
 import re
-from configs.config import dbconfig, key_jwt
+# from configs.config import dbconfig, key_jwt
 from functools import wraps
 
 import os
