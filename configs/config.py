@@ -1,19 +1,19 @@
-# app_config = {
-#     "host":"0.0.0.0",
-#     "port":"5000"
-# }
+app_config = {
+    "host":"0.0.0.0",
+    "port":"5000"
+}
 
-# dbconfig = {
-#     "host":"127.0.0.1",
-#     "port":"3306",
-#     "username":"root",
-#     "password":"",
-#     "database":"countract_db"
-# }
+dbconfig = {
+    "host":"127.0.0.1",
+    "port":"3306",
+    "username":"root",
+    "password":"",
+    "database":"countract_db"
+}
 
-# key_jwt = {
-#     "key":"kumakumabear"
-# }
+key_jwt = {
+    "key":"kumakumabear"
+}
 
 # import os
 

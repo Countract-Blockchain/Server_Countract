@@ -1,17 +1,17 @@
 from flask import Flask
 import os
-# from configs.config import app_config
+from configs.config import app_config
 
 app = Flask(__name__, static_folder=None)
 config = {}
-config['host'] = os.getenv('app_host')
-config['port'] = os.getenv('app_port')
+config['app_host'] = os.getenv('app_host')
+config['app_port'] = os.getenv('app_port')
 
-# if config['host'] == None:
-#     config['host'] = app_config['host']
+if config['app_host'] == None:
+    config['app_host'] = app_config['host']
 
-# if config['port'] == None:
-#     config['port'] = app_config['port']
+if config['app_port'] == None:
+    config['app_port'] = app_config['port']
 
 try:
     from controllers.user_controller import *
@@ -20,9 +20,10 @@ try:
 except Exception as e:
     print(e)
 
-# @app.route("/")
-# def index():
-#     return "This is Countract"
 
 if __name__ == '__main__':
-    app.run(debug=True, host=config['host'], port=config['port'])
+    # print("Server is running on host: " + config['app_host'] + " and port: " + config['app_port'])
+    @app.route("/")
+    def index():
+        return "This is Countract"
+    app.run(debug=True, host='0.0.0.0', port='5000')
