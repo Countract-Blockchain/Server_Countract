@@ -20,5 +20,9 @@ try:
 except Exception as e:
     print(e)
 
+@app.route("/")
+def index():
+    return "This is Countract"
+
 if __name__ == '__main__':
     app.run(debug=True, host=config['host'], port=config['port'])
