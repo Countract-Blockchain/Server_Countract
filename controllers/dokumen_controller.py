@@ -10,6 +10,13 @@ from PIL import Image
 from configs.config import key_jwt
 from app import app
 import os
+from modules.Encrypter import Encrypter
+from modules.Decrypter import Decrypter
+
+import io
+import numpy as np
+import cv2
+from Crypto.Cipher import AES
 
 config = {}
 config['key_jwt'] = os.getenv('key_jwt')
@@ -22,8 +29,29 @@ auth = auth_model()
 aks_model = akses_model() 
 usr_model = user_model()
 
+savepath = 'F:/Project/Countract/images/'
+
+from Crypto.Cipher import AES
+
+def enc_image(input_data,key,iv,filepath):
+	cfb_cipher = AES.new(key, AES.MODE_CFB, iv)
+	enc_data = cfb_cipher.encrypt(input_data)
+
+	enc_file = open(filepath+"/encrypted.enc", "wb")
+	enc_file.write(enc_data)
+	enc_file.close()
+
+	
+def dec_image(input_data,key,iv,filepath):
+	cfb_decipher = AES.new(key, AES.MODE_CFB, iv)
+	plain_data = cfb_decipher.decrypt(input_data)
+
+	output_file = open(filepath+"/output.png", "wb")
+	output_file.write(plain_data)
+	output_file.close()
+
 @app.route("/dokumen/upload", methods=["POST"])
-@auth.token_auth()
+# @auth.token_auth()
 def upload_encode():
     authorization = request.headers.get("authorization")
     token = authorization.split(" ")[1]
@@ -60,10 +88,59 @@ def upload_encode():
     img_visible = Image.open(source_img_visible)
     img_hidden = Image.open(source_img_hidden)
 
-    path = encode_image(img_visible, img_hidden)
+    # img_visible = img_visible.resize((img_hidden.size[0], img_hidden.size[1]))
+
+    # convert PIL into numpy array
+    np_img = np.array(img_hidden.getdata()).reshape(img_hidden.size[1], img_hidden.size[0], 3)
+
+    # convert numpy array into byte
+    byte_img = np_img.tobytes()
+  
+
+    #Encrypt
+    key = b'gavecrtqogavecrtqogavecrtqo23fde' # 32 bytes key
+    nonce = b'H\x82\x1dM\xc4\xdaT\x0f\x17\x0e\xa9\xad\x94\x89\x81v'
+
+    cipher = AES.new(key, AES.MODE_EAX, nonce=nonce) #MODE_EAX => is about "how" to encript
+    
+    # we need to convert to bytes - we encrypt bytes - not strings
+    encryptedContent, messageDigest = cipher.encrypt_and_digest(byte_img)
+    
+    cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
+
+    
+    img_enc = np.frombuffer(encryptedContent, dtype=np_img.dtype)
+    img_enc = img_enc.reshape(img_hidden.size[1], img_hidden.size[0], 3)
+    # print(img_enc.shape)
+    img_enc = img_enc
+    img_enc = img_enc.astype(np.uint8)
+    img_enc = Image.fromarray(img_enc)
+    print("enc_size")
+    print(img_enc.size)
+    img_enc.save(savepath + '/encrypted_image.png')
+
+
+    # decryptContent = cipher.decrypt(encryptedContent)
+
+    # print(len(decryptContent))
+
+    # img_dec = np.frombuffer(decryptContent, dtype=np_img.dtype)
+    # img_dec = img_dec.reshape(img_hidden.size[1], img_hidden.size[0], 3)
+    # print(img_dec.shape)
+    # img_dec = img_dec
+    # img_dec = img_dec.astype(np.uint8)
+    # img_dec = Image.fromarray(img_dec)
+    # img_dec.save(savepath + '/decrypted_image.png')
+
+    # return jsonify(savepath), 200   
+
+    encoded_image = encode_image(img_visible, img_enc)
+    print("masuk encoded")
+    print(encoded_image.size)
+    encoded_image.save(savepath + '/encoded_image_new.png')
     data = {
         "user_id":tokendata["ID"],
-        "path":path,
+        "path":savepath,
         "jenis":jenis
     }
     # print(data)
@@ -91,12 +168,43 @@ def dokumen_decode():
         }), 400
 
     image = Image.open(source_image)
+    print("masuk decoded")
+    print(image.size)
 
-    path = decode_image(image)
+    decoded_image = decode_image(image)
+    print("dec_imgsize")
+    print(decoded_image.size)
+    decoded_image.save(savepath + '/decoded_image_new.png')
+
+    # convert PIL into numpy array
+    np_img = np.array(decoded_image.getdata()).reshape(decoded_image.size[1], decoded_image.size[0], 3)
+
+    # convert numpy array into byte
+    byte_img = np_img.tobytes()
+  
+
+    #Encrypt
+    key = b'gavecrtqogavecrtqogavecrtqo23fde' # 32 bytes key
+    nonce = b'H\x82\x1dM\xc4\xdaT\x0f\x17\x0e\xa9\xad\x94\x89\x81v'
+
+    cipher = AES.new(key, AES.MODE_EAX, nonce=nonce) #MODE_EAX => is about "how" to encript
+
+    decryptContent = cipher.decrypt(byte_img)
+
+    print(len(decryptContent))
+
+    img_dec = np.frombuffer(decryptContent, dtype=np_img.dtype)
+    img_dec = img_dec.reshape(decoded_image.size[1], decoded_image.size[0], 3)
+    img_dec = img_dec
+    img_dec = img_dec.astype(np.uint8)
+    img_dec = Image.fromarray(img_dec)
+    img_dec.save(savepath + '/decrypted_image_new.png')
+
+    # return jsonify(savepath), 200
 
     return jsonify({
             "status": "OK",
-            "path":path
+            "path":savepath
         }), 200
 
 @app.route("/dokumen", methods=["GET"])

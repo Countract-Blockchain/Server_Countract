@@ -6,9 +6,9 @@ def decode_image(image):
     # img_visible = Image.open(img_visible_path)
     # img_hidden = Image.open(img_hidden_path)
     decoded_image = decode(image)
-    decoded_image.save(output_path)
+    # decoded_image.save(output_path)
 
-    return output_path
+    return decoded_image
 
 def extract_hidden_pixels(image, width_visible, height_visible, pixel_count):
 	"""

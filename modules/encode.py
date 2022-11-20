@@ -7,9 +7,8 @@ def encode_image(img_visible, img_hidden):
     # img_visible = Image.open(img_visible_path)
     # img_hidden = Image.open(img_hidden_path)
     encoded_image = encode(img_visible, img_hidden)
-    encoded_image.save(output_path)
 
-    return output_path
+    return encoded_image
 
 def get_binary_pixel_values(img, width, height):
 	"""
