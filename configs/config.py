@@ -4,7 +4,7 @@ app_config = {
 }
 
 dbconfig = {
-    "host":"localhost",
+    "host":"host.docker.internal",
     "port":"3306",
     "username":"root",
     "password":"",
@@ -21,7 +21,7 @@ import os
 os.environ['app_host'] = '0.0.0.0'
 os.environ['app_port'] = '5000'
 
-os.environ['db_host'] = 'localhost'
+os.environ['db_host'] = 'host.docker.internal'
 os.environ['db_port'] = '3306'
 os.environ['db_username'] = 'root'
 os.environ['db_password'] = ''
