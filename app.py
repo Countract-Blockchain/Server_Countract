@@ -20,9 +20,8 @@ try:
 except Exception as e:
     print(e)
 
-# @app.route("/")
-# def index():
-#     return "This is Countract"
-
 if __name__ == '__main__':
+    @app.route("/")
+    def index():
+        return "This is Countract"
     app.run(debug=True, host="0.0.0.0", port="5000")

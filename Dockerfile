@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 FROM python:alpine
 
 # set a directory for the app
