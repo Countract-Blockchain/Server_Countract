@@ -1,5 +1,7 @@
 FROM python:alpine
 
+# RUN apt update
+
 # set a directory for the app
 WORKDIR /python-docker
 
