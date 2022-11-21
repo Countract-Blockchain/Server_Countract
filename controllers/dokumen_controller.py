@@ -56,7 +56,10 @@ def upload_encode():
     authorization = request.headers.get("authorization")
     token = authorization.split(" ")[1]
     tokendata = jwt.decode(token, config['key_jwt'], algorithms="HS256")
+    print(tokendata)
     jenis = request.form['jenis']
+
+    # return jsonify(tokendata), 200
 
     if "img_visible" not in request.files:
         return jsonify({
@@ -117,7 +120,7 @@ def upload_encode():
     img_enc = Image.fromarray(img_enc)
     print("enc_size")
     print(img_enc.size)
-    img_enc.save(savepath + '/encrypted_image.png')
+    img_enc.save(savepath + '{}_{}'.format(tokendata['ID'], jenis)+'_encrypted_image.png')
 
 
     # decryptContent = cipher.decrypt(encryptedContent)
@@ -137,10 +140,11 @@ def upload_encode():
     encoded_image = encode_image(img_visible, img_enc)
     print("masuk encoded")
     print(encoded_image.size)
-    encoded_image.save(savepath + '/encoded_image_new.png')
+    save_name = savepath + '{}_{}'.format(tokendata['ID'], jenis) + '_encoded_image_new.png'
+    encoded_image.save(save_name)
     data = {
         "user_id":tokendata["ID"],
-        "path":savepath,
+        "path":save_name,
         "jenis":jenis
     }
     # print(data)
@@ -153,6 +157,13 @@ def upload_encode():
 
 @app.route("/dokumen/decode", methods=["POST"])
 def dokumen_decode():
+
+    authorization = request.headers.get("authorization")
+    token = authorization.split(" ")[1]
+    tokendata = jwt.decode(token, config['key_jwt'], algorithms="HS256")
+    print(tokendata)
+    jenis = request.form['jenis']
+
     if "image" not in request.files:
         return jsonify({
             "status": "Bad Request",
@@ -174,7 +185,8 @@ def dokumen_decode():
     decoded_image = decode_image(image)
     print("dec_imgsize")
     print(decoded_image.size)
-    decoded_image.save(savepath + '/decoded_image_new.png')
+    save_name = savepath + '{}_{}'.format(tokendata['ID'], jenis) + '_decoded_image_new.png'
+    decoded_image.save(save_name)
 
     # convert PIL into numpy array
     np_img = np.array(decoded_image.getdata()).reshape(decoded_image.size[1], decoded_image.size[0], 3)
@@ -198,13 +210,14 @@ def dokumen_decode():
     img_dec = img_dec
     img_dec = img_dec.astype(np.uint8)
     img_dec = Image.fromarray(img_dec)
-    img_dec.save(savepath + '/decrypted_image_new.png')
+    save_name = savepath + '{}_{}'.format(tokendata['ID'], jenis) + '_decrypted_image_new.png'
+    img_dec.save(save_name)
 
     # return jsonify(savepath), 200
 
     return jsonify({
             "status": "OK",
-            "path":savepath
+            "path":save_name
         }), 200
 
 @app.route("/dokumen", methods=["GET"])
