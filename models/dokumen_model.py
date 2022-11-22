@@ -29,8 +29,15 @@ class dokumen_model():
         self.cur = self.con.cursor(dictionary=True)
 
     def add_dokumen_model(self,data):
-        self.cur.execute(f"INSERT INTO dokumens(jenis, path, user_id) VALUES('{data['jenis']}', '{data['path']}', '{data['user_id']}')")
-        return make_response({"message":"CREATED_SUCCESSFULLY"},201)
+        # self.cur.execute(f"INSERT INTO dokumens(jenis, path, user_id, image) VALUES('{data['jenis']}', '{data['path']}', '{data['user_id']}')")
+        args = (data['jenis'], data['path'], data['user_id'], data['nomor'])
+        query = "INSERT INTO dokumens(jenis, path, user_id, nomor) VALUES(%s, %s, %s, %s)"
+        self.cur.execute(query, args)
+        query = "SELECT LAST_INSERT_ID() as doc_id;"
+        self.cur.execute(query)
+        result = self.cur.fetchall()
+        
+        return result
 
     def get_dokumen_model(self,data):
         self.cur.execute(f"SELECT ID, path FROM dokumens WHERE user_id='{data['user_id']}' AND jenis='{data['jenis']}'")
@@ -39,6 +46,11 @@ class dokumen_model():
     
     def get_all_dokumen_model(self,data):
         self.cur.execute(f"SELECT ID, path, jenis FROM dokumens WHERE user_id='{data['user_id']}'")
+        result = self.cur.fetchall()
+        return result
+    
+    def get_dokumen_by_id(self,data):
+        self.cur.execute(f"SELECT * FROM dokumens WHERE id='{data['id_dokumen']}'")
         result = self.cur.fetchall()
         return result
 

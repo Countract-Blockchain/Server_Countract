@@ -1,8 +1,10 @@
 from flask import Flask
 import os
 from configs.config import app_config
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__, static_folder=None)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 config = {}
 config['host'] = os.getenv('app_host')
 config['port'] = os.getenv('app_port')
@@ -16,7 +18,7 @@ if config['port'] == None:
 try:
     from controllers.user_controller import *
     from controllers.dokumen_controller import *
-    from controllers.akses_controller import *
+    # from controllers.akses_controller import *
 except Exception as e:
     print(e)
 

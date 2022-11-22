@@ -59,13 +59,13 @@ class user_model():
         return make_response({"message":"CREATED_SUCCESSFULLY"},201)
 
     def user_login_model(self, username, password):
-        self.cur.execute(f"SELECT ID, email, password from users WHERE email='{username}'")
+        self.cur.execute(f"SELECT ID, email, name, password from users WHERE email='{username}'")
         result = self.cur.fetchall()
         print(result[0]['password'])
         
         if len(result)==1:
             if bcrypt.checkpw(bytes(f"{password}", encoding="utf-8"), bytes(f"{result[0]['password']}", encoding="utf-8")):
-                exptime = datetime.now() + timedelta(minutes=30)
+                exptime = datetime.now() + timedelta(days=365)
                 exp_epoc_time = exptime.timestamp()
                 data = {
                     "ID": result[0]['ID'],
@@ -74,7 +74,11 @@ class user_model():
                 }
                 # print(int(exp_epoc_time))
                 jwt_token = jwt.encode(data, config['key_jwt'], algorithm="HS256")
-                return make_response({"token":jwt_token}, 200)
+                return make_response({
+                    "id":result[0]['ID'],
+                    "name":result[0]['name'],
+                    "token":jwt_token
+                }, 200)
             else:
                 return make_response({"message":"Please Check Your Email or Password"}, 204)
         else:
