@@ -16,6 +16,7 @@ import io
 import numpy as np
 import cv2
 from Crypto.Cipher import AES
+import base64
 
 config = {}
 config['key_jwt'] = os.getenv('key_jwt')
@@ -146,6 +147,7 @@ def upload_encode():
     print(encoded_image.size)
     save_name = savepath + '{}_{}'.format(tokendata['ID'], jenis) + '_encoded_image_new.png'
     encoded_image.save(save_name)
+    base64_encoded = encoded_image
     data = {
         "user_id":tokendata["ID"],
         "path":save_name,

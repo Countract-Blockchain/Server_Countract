@@ -1,6 +1,10 @@
 import mysql.connector
 import bcrypt
 
+from PIL import Image
+import base64
+from io import BytesIO
+
 dbconfig = {
     "host":"localhost",
     "port":"3306",
@@ -52,16 +56,35 @@ class migration():
         data1 = {
             "jenis":"Kartu Tanda Penduduk",
             "path" : "path_ktp_usr1",
-            "user_id": 1
+            "user_id": 1,
+            "nomor":"350325256"
         }
         data2 = {
             "jenis":"Kartu Keluarga",
             "path" : "path_kk_usr1",
-            "user_id": 1
+            "user_id": 1,
+            "nomor":"350325256"
         }
-        self.cur.execute("CREATE TABLE dokumens (ID int NOT NULL AUTO_INCREMENT, jenis varchar(255), path varchar(255), user_id varchar(255), PRIMARY KEY (ID));")
-        self.cur.execute(f"INSERT INTO dokumens(jenis, path, user_id) VALUES('{data1['jenis']}', '{data1['path']}', '{data1['user_id']}')")
-        self.cur.execute(f"INSERT INTO dokumens(jenis, path, user_id) VALUES('{data2['jenis']}', '{data2['path']}', '{data2['user_id']}')")
+        img_visible = Image.open('F:\Project\Countract\images\\1_ktp_encoded_image_new.png')
+ 
+
+        buffered = BytesIO()
+        img_visible.save(buffered, format="JPEG")
+        img_str = base64.b64encode(buffered.getvalue())
+        # base64_visible = base64.b64encode(img_visible)
+        # print(len(base64.b64decode(img_str)))
+        self.cur.execute("CREATE TABLE dokumens (ID int NOT NULL AUTO_INCREMENT, jenis varchar(255), path varchar(255), user_id varchar(255), nomor varchar(255), image BLOB, PRIMARY KEY (ID));")
+        
+        args = (data1['jenis'], data1['path'], data1['user_id'], data1['nomor'], img_str)
+        query = "INSERT INTO dokumens(jenis, path, user_id, nomor, image) VALUES(%s, %s, %s, %s, %s)"
+        self.cur.execute(query, args)
+
+        args = (data2['jenis'], data2['path'], data2['user_id'], data2['nomor'], img_str)
+        query = "INSERT INTO dokumens(jenis, path, user_id, nomor, image) VALUES(%s, %s, %s, %s, %s)"
+        self.cur.execute(query, args)
+
+        # self.cur.execute(f"INSERT INTO dokumens(jenis, path, user_id, image) VALUES('{data1['jenis']}', '{data1['path']}', '{data1['user_id']}', \'{img_str}\')")
+        # self.cur.execute(f"INSERT INTO dokumens(jenis, path, user_id, image) VALUES('{data2['jenis']}', '{data2['path']}', '{data2['user_id']}', \'{img_str}\')")
 
     def aksess(self):
         self.cur.execute("DROP TABLE IF EXISTS aksess;")
