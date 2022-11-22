@@ -54,6 +54,14 @@ class user_model():
         else:
             return None
 
+    def get_user_by_id(self, id):
+        self.cur.execute(f"SELECT name FROM users WHERE ID='{id}'")
+        result = self.cur.fetchall()
+        if len(result)>0:
+            return result[0]
+        else:
+            return None
+
     def add_user_model(self,data):
         self.cur.execute(f"INSERT INTO users(name ,email, password) VALUES('{data['name']}', '{data['email']}', '{data['password']}')")
         return make_response({"message":"CREATED_SUCCESSFULLY"},201)
@@ -80,6 +88,6 @@ class user_model():
                     "token":jwt_token
                 }, 200)
             else:
-                return make_response({"message":"Please Check Your Email or Password"}, 204)
+                return make_response({"message":"Please Check Your Email or Password"}, 404)
         else:
-            return make_response({"message":"Please Check Your Email or Password"}, 204)
+            return make_response({"message":"Please Check Your Email or Password"}, 404)

@@ -35,3 +35,7 @@ def user_login():
     password = request.form.get('password')
     
     return obj.user_login_model(email, password)
+
+@app.route("/user/<id>", methods=["GET"])
+def user_get_by_id(id):
+    return obj.get_user_by_id(id)

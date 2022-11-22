@@ -421,6 +421,36 @@ def get_dokumen_by_id(id_dokumen):
             response[i]["pihak"] = 0
             response[i]["permohonan"] = 0
 
+    pihak_berakses = requests.get(f'http://{ip_blockchain}/dokumen/{response[0]["id"]}')
+    # print(pihak_berakses.json())
+    response[0][ "pihak_berakses"] = pihak_berakses.json()
+
     # response[0]['id'] = response[0].pop('ID')
     # img_dec.save('F:\Project\Countract\images\dec_test.png')
+    return jsonify(response[0]), 200
+
+@app.route("/dokumen/riwayat", methods=["GET"])
+def get_riwayat_dokumen():
+    authorization = request.headers.get("authorization")
+    token = authorization.split(" ")[1]
+    tokendata = jwt.decode(token, config['key_jwt'], algorithms="HS256")
+    id_usr = tokendata["ID"]
+
+    riwayat = requests.get(f'http://{ip_blockchain}//get_access/user/{int(id_usr)}')
+    riwayat = riwayat.json()
+
+    response = []
+    for i in range(len(riwayat)):
+        nama = usr_model.get_user_by_id(riwayat[i]["recipient"])
+        jenis_doc = riwayat[i]["doc_type"]
+        tanggal = riwayat[i]["datetime"]
+        status = riwayat[i]["access"]
+        temp = {
+            'nama_pengakses':nama['name'],
+            'jenis_dokumen':jenis_doc,
+            'tanggal':tanggal,
+            'status_diterima':status
+        }
+        response.append(temp)
+
     return jsonify(response), 200
