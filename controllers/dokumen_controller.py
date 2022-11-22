@@ -10,8 +10,7 @@ from PIL import Image
 from configs.config import key_jwt
 from app import app
 import os
-from modules.Encrypter import Encrypter
-from modules.Decrypter import Decrypter
+import requests
 
 import io
 import numpy as np
@@ -28,6 +27,8 @@ obj = dokumen_model()
 auth = auth_model()
 aks_model = akses_model() 
 usr_model = user_model()
+
+ip_blockchain = 'localhost:5001'
 
 savepath = 'F:/Project/Countract/images/'
 
@@ -57,15 +58,16 @@ def upload_encode():
     token = authorization.split(" ")[1]
     tokendata = jwt.decode(token, config['key_jwt'], algorithms="HS256")
     print(tokendata)
-    jenis = request.form['jenis']
+    jenis = request.form['jenis_dokumen']
+    nomor = request.form['nomor_dokumen']
 
     # return jsonify(tokendata), 200
 
-    if "img_visible" not in request.files:
-        return jsonify({
-            "status": "Bad Request",
-            "message": "No file part."
-        }), 400
+    # if "img_visible" not in request.files:
+    #     return jsonify({
+    #         "status": "Bad Request",
+    #         "message": "No file part."
+    #     }), 400
     
     if "img_hidden" not in request.files:
         return jsonify({
@@ -73,20 +75,22 @@ def upload_encode():
             "message": "No file part."
         }), 400
 
-    source_img_visible = request.files.get("img_visible")
+    # source_img_visible = request.files.get("img_visible")
+    source_img_visible = 'F:\\Project\\Countract\\images\\visible_image.jpg'
     source_img_hidden = request.files.get("img_hidden")
     
-    if source_img_visible.filename == "":
-        return jsonify({
-            "status": "Bad Request",
-            "message": "No selected file."
-        }), 400
+    # if source_img_visible.filename == "":
+    #     return jsonify({
+    #         "status": "Bad Request",
+    #         "message": "No selected file."
+    #     }), 400
 
     if source_img_hidden.filename == "":
         return jsonify({
             "status": "Bad Request",
             "message": "No selected file."
         }), 400
+
 
     img_visible = Image.open(source_img_visible)
     img_hidden = Image.open(source_img_hidden)
@@ -145,7 +149,8 @@ def upload_encode():
     data = {
         "user_id":tokendata["ID"],
         "path":save_name,
-        "jenis":jenis
+        "jenis":jenis,
+        "nomor":nomor
     }
     # print(data)
     obj.add_dokumen_model(data)
@@ -265,3 +270,29 @@ def check_dokumen_akses():
         return make_response({"data":dokumen_data})
     else:
         return make_response({"Message":"Sorry You Didn't have Access to this Document"}, 400)
+
+@app.route("/user/dokumen", methods=["GET"])
+def get_dokumen_user():
+    authorization = request.headers.get("authorization")
+    token = authorization.split(" ")[1]
+    tokendata = jwt.decode(token, config['key_jwt'], algorithms="HS256")
+
+    data = {
+        "user_id":tokendata["ID"],
+    }
+    print(data)
+
+    dokumen_data = obj.get_all_dokumen_model(data)
+    response = requests.get(f'http://{ip_blockchain}/count_access', json={'owner_id':str(f'{data["user_id"]}')})
+    # print(response.json().keys())
+    list_keys = []
+    for key in response.json().keys():
+        list_keys.append(key)
+    for i in range(len(dokumen_data)):
+        for j in list_keys:
+            if dokumen_data[i]["jenis"] == j:
+                dokumen_data[i]["1"] = response.json()[j]['1']
+                dokumen_data[i]["0"] = response.json()[j]['0']
+                # print("masuk")
+
+    return jsonify(dokumen_data), 200

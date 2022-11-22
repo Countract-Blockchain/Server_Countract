@@ -55,7 +55,7 @@ class user_model():
             return None
 
     def add_user_model(self,data):
-        self.cur.execute(f"INSERT INTO users(email, password) VALUES('{data['email']}', '{data['password']}')")
+        self.cur.execute(f"INSERT INTO users(name ,email, password) VALUES('{data['name']}', '{data['email']}', '{data['password']}')")
         return make_response({"message":"CREATED_SUCCESSFULLY"},201)
 
     def user_login_model(self, username, password):

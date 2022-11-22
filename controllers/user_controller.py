@@ -19,6 +19,7 @@ def add_user():
     hashed = bcrypt.hashpw(bytes(f"{request.form['password']}", encoding="utf-8"), salt)
     # print(hashed.decode())
     hasshed_dict = {
+        "name": request.form['name'],
         "email": request.form['email'],
         "password": hashed.decode()
     }

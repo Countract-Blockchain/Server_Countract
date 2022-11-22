@@ -20,15 +20,48 @@ class migration():
         salt = bcrypt.gensalt()
 
         data1 = {
+            "name":"boggie",
             "email" : "boggie@gmail.com",
             "password": bcrypt.hashpw(bytes("tes123", encoding="utf-8"), salt).decode()
         }
-        self.cur.execute("CREATE TABLE users (ID int NOT NULL AUTO_INCREMENT, email varchar(255), password varchar(255), PRIMARY KEY (ID));")
-        self.cur.execute(f"INSERT INTO users(email, password) VALUES('{data1['email']}', '{data1['password']}')")
+        data2 = {
+            "name":"wisnu",
+            "email" : "wispram@gmail.com",
+            "password": bcrypt.hashpw(bytes("tes123", encoding="utf-8"), salt).decode()
+        }
+        data3 = {
+            "name":"ivan",
+            "email" : "ivan@gmail.com",
+            "password": bcrypt.hashpw(bytes("tes123", encoding="utf-8"), salt).decode()
+        }
+        data4 = {
+            "name":"iqbal",
+            "email" : "iqbalabd@gmail.com",
+            "password": bcrypt.hashpw(bytes("tes123", encoding="utf-8"), salt).decode()
+        }
+
+        self.cur.execute("CREATE TABLE users (ID int NOT NULL AUTO_INCREMENT, name varchar(255), email varchar(255), password varchar(255), PRIMARY KEY (ID));")
+        self.cur.execute(f"INSERT INTO users(name, email, password) VALUES('{data1['name']}', '{data1['email']}', '{data1['password']}')")
+        self.cur.execute(f"INSERT INTO users(name, email, password) VALUES('{data2['name']}', '{data2['email']}', '{data2['password']}')")
+        self.cur.execute(f"INSERT INTO users(name, email, password) VALUES('{data3['name']}', '{data3['email']}', '{data3['password']}')")
+        self.cur.execute(f"INSERT INTO users(name, email, password) VALUES('{data4['name']}', '{data4['email']}', '{data4['password']}')")
 
     def dokumens(self):
         self.cur.execute("DROP TABLE IF EXISTS dokumens;")
+
+        data1 = {
+            "jenis":"Kartu Tanda Penduduk",
+            "path" : "path_ktp_usr1",
+            "user_id": 1
+        }
+        data2 = {
+            "jenis":"Kartu Keluarga",
+            "path" : "path_kk_usr1",
+            "user_id": 1
+        }
         self.cur.execute("CREATE TABLE dokumens (ID int NOT NULL AUTO_INCREMENT, jenis varchar(255), path varchar(255), user_id varchar(255), PRIMARY KEY (ID));")
+        self.cur.execute(f"INSERT INTO dokumens(jenis, path, user_id) VALUES('{data1['jenis']}', '{data1['path']}', '{data1['user_id']}')")
+        self.cur.execute(f"INSERT INTO dokumens(jenis, path, user_id) VALUES('{data2['jenis']}', '{data2['path']}', '{data2['user_id']}')")
 
     def aksess(self):
         self.cur.execute("DROP TABLE IF EXISTS aksess;")
